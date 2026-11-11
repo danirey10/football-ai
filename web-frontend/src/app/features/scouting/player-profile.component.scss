@@ -1,0 +1,610 @@
+// ==============================================================
+// Estilos del Perfil y Radar de Scouting Deportivo
+// Fondo oscuro: #1e293b | Acentos esmeralda: #34d399
+// ==============================================================
+
+$slate-950: #020617;
+$slate-900: #0f172a;
+$slate-850: #131f37;
+$slate-800: #1e293b; // Fondo oscuro requerido
+$slate-700: #334155;
+$slate-600: #475569;
+$slate-500: #64748b;
+$slate-400: #94a3b8;
+$slate-300: #cbd5e1;
+$slate-200: #e2e8f0;
+$slate-100: #f1f5f9;
+$slate-50:  #f8fafc;
+
+$emerald-400: #34d399; // Acento esmeralda requerido
+$emerald-500: #10b981;
+$emerald-600: #059669;
+
+$sky-400:     #38bdf8;
+$rose-400:    #fb7185;
+$amber-400:   #fbbf24;
+
+.player-profile-view {
+  min-height: 100vh;
+  background-color: $slate-950;
+  color: $slate-50;
+  padding: 24px 32px 64px;
+  max-width: 1360px;
+  margin: 0 auto;
+  font-family: inherit;
+
+  @media (max-width: 768px) {
+    padding: 16px 16px 48px;
+  }
+}
+
+// Barra de navegación global unificada
+.profile-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-bottom: 20px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid rgba($slate-700, 0.6);
+
+  .nav-brand-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .nav-pill {
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      color: $emerald-400;
+      background: rgba($emerald-500, 0.14);
+      border: 1px solid rgba($emerald-400, 0.3);
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .nav-brand-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: $slate-50;
+      letter-spacing: -0.01em;
+    }
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: $slate-400;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      background: rgba($slate-850, 0.8);
+      border: 1px solid rgba($slate-700, 0.7);
+      transition: all 0.15s ease;
+
+      &:hover {
+        color: $slate-50;
+        background: $slate-800;
+        border-color: $slate-600;
+      }
+
+      &--active {
+        color: $emerald-400;
+        border-color: rgba($emerald-400, 0.4);
+        background: $slate-800;
+      }
+    }
+  }
+}
+
+// Barra superior de navegación y metadatos
+.profile-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-bottom: 20px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid rgba($slate-700, 0.6);
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: $slate-300;
+    text-decoration: none;
+    padding: 8px 16px;
+    background: $slate-800;
+    border: 1px solid $slate-700;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+
+    .back-icon {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.2s ease;
+    }
+
+    &:hover {
+      color: $emerald-400;
+      border-color: rgba($emerald-400, 0.4);
+      background: lighten($slate-800, 4%);
+
+      .back-icon {
+        transform: translateX(-3px);
+      }
+    }
+  }
+
+  .profile-header-tag {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .system-tag {
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      color: $emerald-400;
+      background: rgba($emerald-500, 0.14);
+      border: 1px solid rgba($emerald-400, 0.3);
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .id-tag {
+      font-size: 0.8rem;
+      font-family: monospace;
+      color: $slate-400;
+      background: $slate-800;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid $slate-700;
+    }
+  }
+}
+
+// Estados de carga y error
+.profile-loading-state,
+.profile-error-state {
+  text-align: center;
+  padding: 80px 20px;
+
+  .loading-ring {
+    width: 44px;
+    height: 44px;
+    border: 3px solid rgba($emerald-400, 0.2);
+    border-top-color: $emerald-400;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    animation: spin 0.75s linear infinite;
+  }
+
+  p {
+    font-size: 1rem;
+    color: $slate-400;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.profile-error-state .error-box {
+  max-width: 440px;
+  margin: 0 auto;
+  background: $slate-800;
+  border: 1px solid $slate-700;
+  border-radius: 16px;
+  padding: 32px 24px;
+
+  h3 {
+    color: $rose-400;
+    margin-bottom: 8px;
+  }
+
+  p {
+    margin-bottom: 20px;
+    color: $slate-400;
+  }
+
+  .btn-return {
+    display: inline-block;
+    padding: 8px 18px;
+    background: $slate-700;
+    color: $slate-50;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+
+    &:hover {
+      background: $emerald-500;
+      color: $slate-950;
+    }
+  }
+}
+
+// ==============================================================
+// Maquetación de dos columnas (Izquierda: Ficha, Derecha: Radar)
+// ==============================================================
+.profile-layout {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 32px;
+  align-items: start;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}
+
+// ==============================================================
+// COLUMNA IZQUIERDA: FICHA TÉCNICA (PLAYER DOSSIER CARD)
+// ==============================================================
+.player-dossier-card {
+  background: $slate-800; // Fondo oscuro requerido
+  border: 1px solid rgba($slate-700, 0.9);
+  border-radius: 20px;
+  padding: 28px 24px;
+  box-shadow: 0 20px 40px -12px rgba($slate-950, 0.75),
+              0 0 0 1px rgba(255, 255, 255, 0.03);
+  position: relative;
+  overflow: hidden;
+
+  // Sutil acento esmeralda en el borde superior
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, $emerald-500, $emerald-400, $sky-400);
+  }
+}
+
+// Sección de foto / Avatar placeholder
+.avatar-section {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 20px;
+
+  .photo-placeholder {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: linear-gradient(135deg, $slate-700, $slate-850);
+    border: 3px solid $emerald-400; // Acento esmeralda
+    box-shadow: 0 0 20px rgba($emerald-400, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+
+    .silhouette-svg {
+      width: 80px;
+      height: 80px;
+      color: rgba($slate-500, 0.45);
+    }
+
+    .avatar-initials {
+      position: absolute;
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: $slate-50;
+      letter-spacing: 0.05em;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    }
+  }
+
+  .position-badge-overlay {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+
+    &[data-pos="DEL"] { background: $rose-400; color: #1e0509; }
+    &[data-pos="MED"] { background: $emerald-400; color: #022312; }
+    &[data-pos="DEF"] { background: $sky-400; color: #031c29; }
+    &[data-pos="POR"] { background: $amber-400; color: #281702; }
+  }
+}
+
+// Identidad
+.identity-section {
+  text-align: center;
+  margin-bottom: 24px;
+
+  .player-name {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: $slate-50;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+
+  .player-position {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: $slate-400;
+  }
+}
+
+// Cuadrícula de metadatos (Ficha técnica)
+.dossier-meta-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+
+  .meta-card {
+    background: rgba($slate-850, 0.9);
+    border: 1px solid rgba($slate-700, 0.6);
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+
+    .meta-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: $slate-400;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .meta-value-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      .meta-icon {
+        width: 14px;
+        height: 14px;
+        color: $slate-400;
+      }
+
+      .meta-value {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: $slate-100;
+      }
+
+      .birth-date {
+        font-size: 0.75rem;
+        color: $slate-500;
+      }
+    }
+
+    // Tarjeta destacada de valor de mercado
+    &--highlight {
+      background: rgba($emerald-500, 0.1);
+      border-color: rgba($emerald-400, 0.4);
+
+      .meta-label {
+        color: $emerald-400;
+      }
+
+      .currency-symbol {
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: $emerald-400;
+      }
+
+      .market-value {
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: $emerald-400;
+        font-family: monospace;
+      }
+    }
+
+    .ovr-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      background: linear-gradient(135deg, $emerald-500, $sky-400);
+      color: $slate-950;
+      font-weight: 800;
+      border-radius: 6px;
+      font-size: 0.85rem;
+    }
+  }
+}
+
+// Cuadro de diagnóstico
+.scouting-verdict-box {
+  background: rgba($slate-900, 0.8);
+  border: 1px solid rgba($slate-700, 0.5);
+  border-radius: 12px;
+  padding: 14px 16px;
+
+  .verdict-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+
+    .verdict-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: $emerald-400;
+      box-shadow: 0 0 8px $emerald-400;
+    }
+
+    .verdict-title {
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: $emerald-400;
+      letter-spacing: 0.08em;
+    }
+  }
+
+  .verdict-text {
+    font-size: 0.8rem;
+    color: $slate-300;
+    line-height: 1.5;
+  }
+
+  // Estilo alternativo cuando no destaca en ninguna estadística
+  &--warning {
+    border-color: rgba($amber-400, 0.4);
+    background: rgba($amber-400, 0.06);
+
+    .verdict-header {
+      .verdict-dot {
+        background: $amber-400;
+        box-shadow: 0 0 8px $amber-400;
+      }
+
+      .verdict-title {
+        color: $amber-400;
+      }
+    }
+
+    .verdict-text {
+      color: $slate-300;
+    }
+  }
+}
+
+// ==============================================================
+// COLUMNA DERECHA: RADAR DE SCOUTING (PANTALLA DE GESTIÓN TÁCTICA)
+// ==============================================================
+.radar-analytics-panel {
+  background: $slate-800; // Fondo oscuro requerido
+  border: 1px solid rgba($slate-700, 0.9);
+  border-radius: 20px;
+  padding: 28px 32px;
+  box-shadow: 0 20px 40px -12px rgba($slate-950, 0.75),
+              0 0 25px rgba($emerald-400, 0.05);
+  position: relative;
+
+  .radar-panel-header {
+    margin-bottom: 20px;
+
+    .panel-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      color: $emerald-400;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .panel-title {
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: $slate-50;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .panel-subtitle {
+      font-size: 0.88rem;
+      color: $slate-400;
+      line-height: 1.55;
+    }
+  }
+}
+
+// Contenedor del gráfico Radar Chart.js
+.radar-chart-container {
+  position: relative;
+  width: 100%;
+  height: 440px;
+  background: radial-gradient(circle at center, rgba($emerald-400, 0.06) 0%, rgba($slate-900, 0.85) 75%);
+  border: 1px solid rgba($slate-700, 0.6);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 24px;
+  box-shadow: inset 0 0 20px rgba($slate-950, 0.6),
+              0 0 15px rgba($emerald-400, 0.05);
+
+  canvas {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+// Cuadrícula resumen de métricas inferiores estilo videojuego
+.metrics-pill-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 520px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .metric-pill {
+    background: rgba($slate-850, 0.8);
+    border: 1px solid rgba($slate-700, 0.7);
+    border-radius: 12px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.2s ease;
+
+    .pill-name {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: $slate-400;
+      text-align: center;
+    }
+
+    .pill-val {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: $slate-200;
+      font-family: monospace;
+    }
+
+    // Acento esmeralda para métricas destacadas (>=80)
+    &--elite {
+      background: rgba($emerald-500, 0.12);
+      border-color: rgba($emerald-400, 0.4);
+      box-shadow: 0 0 12px rgba($emerald-400, 0.15);
+
+      .pill-name {
+        color: $emerald-400;
+      }
+
+      .pill-val {
+        color: $emerald-400;
+      }
+    }
+  }
+}

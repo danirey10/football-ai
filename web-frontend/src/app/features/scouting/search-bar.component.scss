@@ -1,0 +1,471 @@
+// Paleta oscura Slate y acentos de diseño deportivo
+$slate-950: #020617;
+$slate-900: #0f172a;
+$slate-850: #131f37;
+$slate-800: #1e293b;
+$slate-700: #334155;
+$slate-600: #475569;
+$slate-500: #64748b;
+$slate-400: #94a3b8;
+$slate-300: #cbd5e1;
+$slate-200: #e2e8f0;
+$slate-50:  #f8fafc;
+
+$sky-400:   #38bdf8;
+$sky-500:   #0ea5e9;
+$indigo-500:#6366f1;
+$emerald-400:#34d399;
+$emerald-500:#10b981;
+$rose-400:  #fb7185;
+$rose-500:  #f43f5e;
+$amber-400: #fbbf24;
+$amber-500: #f59e0b;
+
+.spotlight-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  font-family: inherit;
+}
+
+// Contenedor principal de la barra de búsqueda
+.spotlight-input-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  background: rgba($slate-850, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid $slate-700;
+  border-radius: 14px;
+  padding: 6px 14px;
+  box-shadow: 0 8px 24px -4px rgba($slate-950, 0.6),
+              0 2px 6px -1px rgba($slate-950, 0.4);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &:hover {
+    border-color: lighten($slate-700, 8%);
+    background: rgba($slate-800, 0.95);
+  }
+
+  &--focused {
+    border-color: $sky-500;
+    background: $slate-850;
+    box-shadow: 0 0 0 3px rgba($sky-500, 0.22),
+                0 16px 36px -6px rgba($slate-950, 0.75);
+  }
+
+  &--loading {
+    border-color: rgba($sky-400, 0.6);
+  }
+}
+
+// Icono de lupa
+.spotlight-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $slate-400;
+  margin-right: 12px;
+  flex-shrink: 0;
+
+  .icon-svg {
+    width: 22px;
+    height: 22px;
+    stroke: currentColor;
+    transition: color 0.2s ease;
+  }
+}
+
+.spotlight-input-container--focused .spotlight-icon {
+  color: $sky-400;
+}
+
+// Campo de texto
+.spotlight-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: $slate-50;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  padding: 10px 0;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+
+  &::placeholder {
+    color: $slate-500;
+    font-weight: 300;
+  }
+}
+
+// Spinner de carga reactivo
+.spotlight-spinner {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+
+  .spinner-ring {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba($sky-400, 0.25);
+    border-top-color: $sky-400;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Botón para limpiar texto
+.spotlight-clear-btn {
+  background: transparent;
+  border: none;
+  color: $slate-400;
+  padding: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  margin-right: 8px;
+  transition: all 0.15s ease;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    color: $slate-50;
+    background: rgba($slate-700, 0.5);
+  }
+}
+
+// Atajo de teclado en la barra
+.spotlight-shortcut {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba($slate-900, 0.7);
+  border: 1px solid rgba($slate-700, 0.7);
+  border-radius: 8px;
+  padding: 4px 8px;
+  color: $slate-400;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s ease;
+
+  .key-symbol {
+    font-size: 0.85rem;
+    font-family: monospace;
+    color: $sky-400;
+  }
+
+  &:hover {
+    background: $slate-700;
+    color: $slate-200;
+    border-color: $slate-600;
+  }
+}
+
+// ==========================================================
+// Menú desplegable flotante de resultados (Spotlight Dropdown)
+// ==========================================================
+.spotlight-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: rgba($slate-900, 0.96);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid $slate-700;
+  border-radius: 16px;
+  box-shadow: 0 24px 48px -8px rgba($slate-950, 0.8),
+              0 8px 16px -4px rgba($slate-950, 0.5);
+  z-index: 1000;
+  overflow: hidden;
+  animation: dropdownAppear 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes dropdownAppear {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.dropdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px 8px;
+  border-bottom: 1px solid rgba($slate-800, 0.8);
+
+  .dropdown-eyebrow {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: $slate-400;
+    text-transform: uppercase;
+  }
+
+  .dropdown-count-badge {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    background: rgba($sky-500, 0.15);
+    color: $sky-400;
+    border-radius: 9999px;
+    border: 1px solid rgba($sky-500, 0.3);
+  }
+}
+
+.dropdown-list {
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  max-height: 420px;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: $slate-700;
+    border-radius: 3px;
+  }
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1px solid transparent;
+
+  &:hover,
+  &--active {
+    background: rgba($slate-800, 0.95);
+    border-color: rgba($slate-700, 0.6);
+  }
+
+  &--active {
+    background: rgba($slate-800, 1);
+    border-color: rgba($sky-500, 0.4);
+    box-shadow: 0 4px 12px rgba($slate-950, 0.4);
+  }
+}
+
+// Badge de posición táctica con colores semánticos
+.position-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 6px 9px;
+  border-radius: 8px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  background: rgba($slate-700, 0.6);
+  color: $slate-200;
+
+  &[data-pos="DEL"] {
+    background: rgba($rose-500, 0.18);
+    color: $rose-400;
+    border: 1px solid rgba($rose-500, 0.35);
+  }
+
+  &[data-pos="MED"] {
+    background: rgba($sky-500, 0.18);
+    color: $sky-400;
+    border: 1px solid rgba($sky-500, 0.35);
+  }
+
+  &[data-pos="DEF"] {
+    background: rgba($emerald-500, 0.18);
+    color: $emerald-400;
+    border: 1px solid rgba($emerald-500, 0.35);
+  }
+
+  &[data-pos="POR"] {
+    background: rgba($amber-500, 0.18);
+    color: $amber-400;
+    border: 1px solid rgba($amber-500, 0.35);
+  }
+}
+
+// Bloque de información del futbolista
+.player-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.player-headline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 3px;
+
+  .player-name {
+    font-size: 0.98rem;
+    font-weight: 600;
+    color: $slate-50;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .player-age-badge {
+    font-size: 0.72rem;
+    font-weight: 500;
+    padding: 1px 7px;
+    background: rgba($slate-700, 0.5);
+    color: $slate-300;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+}
+
+.player-subdetails {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: $slate-400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  .player-club {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: $slate-300;
+
+    .club-icon {
+      width: 13px;
+      height: 13px;
+      color: $slate-400;
+    }
+  }
+
+  .separator {
+    color: $slate-600;
+  }
+
+  .player-position {
+    color: $slate-400;
+  }
+
+  .player-league {
+    color: $slate-500;
+  }
+}
+
+// Acción lateral al hacer hover
+.item-action {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: $slate-500;
+  font-size: 0.75rem;
+  font-weight: 500;
+  opacity: 0.6;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+
+  .action-icon {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+.dropdown-item:hover .item-action,
+.dropdown-item--active .item-action {
+  color: $sky-400;
+  opacity: 1;
+  transform: translateX(2px);
+}
+
+// Estado sin resultados
+.dropdown-empty-state {
+  padding: 32px 20px;
+  text-align: center;
+
+  .empty-icon {
+    width: 44px;
+    height: 44px;
+    margin: 0 auto 12px;
+    color: $slate-600;
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .empty-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: $slate-200;
+    margin-bottom: 6px;
+  }
+
+  .empty-desc {
+    font-size: 0.82rem;
+    color: $slate-400;
+    max-width: 420px;
+    margin: 0 auto;
+    line-height: 1.5;
+
+    strong {
+      color: $sky-400;
+    }
+  }
+}
+
+// Barra de atajos inferior
+.dropdown-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  padding: 8px 18px;
+  background: rgba($slate-950, 0.4);
+  border-top: 1px solid rgba($slate-800, 0.8);
+
+  .footer-hint {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+    color: $slate-500;
+
+    .hint-key {
+      padding: 2px 6px;
+      background: $slate-800;
+      border: 1px solid $slate-700;
+      border-radius: 4px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: $slate-300;
+      font-family: monospace;
+    }
+  }
+}

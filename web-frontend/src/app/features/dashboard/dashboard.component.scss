@@ -1,0 +1,743 @@
+// ==========================================
+// Variables de Color (Paleta Slate Editorial & Gaming)
+// ==========================================
+$slate-950: #020617;
+$slate-900: #0f172a;
+$slate-850: #131f37;
+$slate-800: #1e293b;
+$slate-750: #243248;
+$slate-700: #334155;
+$slate-600: #475569;
+$slate-500: #64748b;
+$slate-400: #94a3b8;
+$slate-300: #cbd5e1;
+$slate-200: #e2e8f0;
+$slate-100: #f1f5f9;
+$slate-50:  #f8fafc;
+
+$emerald-400: #34d399;
+$emerald-500: #10b981;
+$sky-400:     #38bdf8;
+$sky-500:     #0ea5e9;
+$indigo-400:  #818cf8;
+$rose-400:    #fb7185;
+$amber-400:   #fbbf24;
+
+.dashboard {
+  min-height: 100vh;
+  background-color: $slate-950;
+  color: $slate-50;
+  padding: 24px 32px 80px;
+  max-width: 1360px;
+  margin: 0 auto;
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    padding: 16px 16px 48px;
+  }
+}
+
+// ==========================================
+// Barra de Navegación Superior
+// ==========================================
+.dashboard__top-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-bottom: 20px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid rgba($slate-700, 0.6);
+
+  .nav-brand-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .nav-pill {
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      color: $emerald-400;
+      background: rgba($emerald-500, 0.14);
+      border: 1px solid rgba($emerald-400, 0.3);
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .nav-brand-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: $slate-50;
+      letter-spacing: -0.01em;
+    }
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: $slate-400;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      background: rgba($slate-850, 0.8);
+      border: 1px solid rgba($slate-700, 0.7);
+      transition: all 0.15s ease;
+
+      &:hover {
+        color: $slate-50;
+        background: $slate-800;
+        border-color: $slate-600;
+      }
+
+      &--active {
+        color: $emerald-400;
+        border-color: rgba($emerald-400, 0.4);
+        background: $slate-800;
+      }
+    }
+  }
+}
+
+// ==========================================
+// Hero: Buscador Spotlight & Ejemplos
+// ==========================================
+.dashboard__hero {
+  text-align: center;
+  padding: 24px 0 48px;
+  max-width: 860px;
+  margin: 0 auto;
+
+  .hero-badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: $sky-400;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .hero-title {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: $slate-50;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    margin-bottom: 14px;
+
+    @media (max-width: 640px) {
+      font-size: 1.85rem;
+    }
+  }
+
+  .hero-subtitle {
+    font-size: 1.05rem;
+    color: $slate-400;
+    line-height: 1.6;
+    margin-bottom: 32px;
+  }
+
+  .hero-search-box {
+    margin-bottom: 20px;
+  }
+
+  .quick-examples-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    .examples-label {
+      font-size: 0.8rem;
+      color: $slate-500;
+      font-weight: 500;
+    }
+
+    .examples-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+
+      .example-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba($slate-850, 0.9);
+        border: 1px solid rgba($slate-700, 0.8);
+        border-radius: 9999px;
+        padding: 5px 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: $slate-300;
+        cursor: pointer;
+        transition: all 0.15s ease;
+
+        .pill-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: $emerald-400;
+        }
+
+        &:hover {
+          color: $slate-50;
+          background: $slate-750;
+          border-color: $emerald-400;
+          transform: translateY(-1px);
+        }
+      }
+    }
+  }
+}
+
+// ==========================================
+// Secciones Generales del Dashboard
+// ==========================================
+.dashboard__section {
+  margin-bottom: 56px;
+
+  .section-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba($slate-700, 0.5);
+
+    .section-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      color: $emerald-400;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .section-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: $slate-50;
+      letter-spacing: -0.02em;
+    }
+
+    .section-description {
+      font-size: 0.85rem;
+      color: $slate-400;
+      max-width: 640px;
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    .section-link {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: $sky-400;
+      text-decoration: none;
+      transition: all 0.15s ease;
+
+      &:hover {
+        color: lighten($sky-400, 10%);
+        transform: translateX(3px);
+      }
+    }
+  }
+}
+
+// ==========================================
+// Sección 1: Jugadores Más Valorados (Grid)
+// ==========================================
+.top-valued-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+
+  @media (max-width: 1080px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 580px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.valued-card {
+  background: $slate-800;
+  border: 1px solid rgba($slate-700, 0.8);
+  border-radius: 18px;
+  padding: 22px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 10px 25px -5px rgba($slate-950, 0.5);
+  position: relative;
+  outline: none;
+
+  &:hover,
+  &:focus-visible {
+    transform: translateY(-4px);
+    border-color: $emerald-400;
+    box-shadow: 0 16px 36px -8px rgba($slate-950, 0.8),
+                0 0 18px rgba($emerald-400, 0.15);
+  }
+
+  &__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+
+    .pos-badge {
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+
+      &[data-pos="DEL"] { background: rgba($rose-400, 0.18); color: $rose-400; border: 1px solid rgba($rose-400, 0.4); }
+      &[data-pos="MED"] { background: rgba($emerald-400, 0.18); color: $emerald-400; border: 1px solid rgba($emerald-400, 0.4); }
+      &[data-pos="DEF"] { background: rgba($sky-400, 0.18); color: $sky-400; border: 1px solid rgba($sky-400, 0.4); }
+      &[data-pos="POR"] { background: rgba($amber-400, 0.18); color: $amber-400; border: 1px solid rgba($amber-400, 0.4); }
+    }
+
+    .ovr-pill {
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      background: linear-gradient(135deg, $emerald-500, $sky-500);
+      color: #020617;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba($emerald-400, 0.3);
+    }
+  }
+
+  &__avatar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+
+    .avatar-ring {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, $slate-700, $slate-850);
+      border: 2px solid rgba($emerald-400, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 14px rgba($emerald-400, 0.15);
+
+      .avatar-text {
+        font-size: 1.4rem;
+        font-weight: 900;
+        color: $slate-50;
+      }
+    }
+  }
+
+  &__info {
+    text-align: center;
+    margin-bottom: 18px;
+
+    .player-name {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: $slate-50;
+      margin-bottom: 4px;
+    }
+
+    .player-team {
+      font-size: 0.85rem;
+      color: $slate-300;
+      margin-bottom: 2px;
+    }
+
+    .player-role {
+      font-size: 0.78rem;
+      color: $slate-500;
+    }
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 14px;
+    border-top: 1px solid rgba($slate-700, 0.5);
+
+    .market-value-box {
+      display: flex;
+      flex-direction: column;
+
+      .value-label {
+        font-size: 0.68rem;
+        color: $slate-400;
+        text-transform: uppercase;
+        font-weight: 600;
+      }
+
+      .value-amount {
+        font-size: 1rem;
+        font-weight: 800;
+        color: $emerald-400;
+        font-family: monospace;
+      }
+    }
+
+    .action-arrow {
+      color: $slate-500;
+      font-size: 1.1rem;
+      transition: transform 0.2s ease, color 0.2s ease;
+    }
+  }
+
+  &:hover &__footer .action-arrow {
+    color: $emerald-400;
+    transform: translateX(4px);
+  }
+}
+
+// ==========================================
+// Sección 2: Rankings por Atributo FM
+// ==========================================
+.attribute-tabs {
+  display: flex;
+  gap: 6px;
+  background: rgba($slate-850, 0.8);
+  padding: 4px;
+  border: 1px solid $slate-700;
+  border-radius: 10px;
+  flex-wrap: wrap;
+
+  .tab-btn {
+    background: transparent;
+    border: none;
+    color: $slate-400;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+    &:hover {
+      color: $slate-200;
+    }
+
+    &--active {
+      background: $slate-700;
+      color: $emerald-400;
+      box-shadow: 0 2px 8px rgba($slate-950, 0.4);
+    }
+  }
+}
+
+.leaderboard-card {
+  background: $slate-800;
+  border: 1px solid $slate-700;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 12px 32px -8px rgba($slate-950, 0.6);
+}
+
+.leaderboard-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.leaderboard-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba($slate-700, 0.4);
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background: rgba($slate-750, 0.9);
+
+    .row-arrow {
+      color: $emerald-400;
+      transform: translateX(4px);
+    }
+  }
+
+  .rank-num {
+    font-size: 1rem;
+    font-weight: 900;
+    color: $slate-500;
+    width: 32px;
+    font-family: monospace;
+  }
+
+  .player-meta {
+    flex: 1;
+    min-width: 180px;
+
+    .name {
+      display: block;
+      font-size: 1rem;
+      font-weight: 700;
+      color: $slate-50;
+      margin-bottom: 2px;
+    }
+
+    .sub {
+      font-size: 0.8rem;
+      color: $slate-400;
+    }
+  }
+
+  .metric-visual {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 240px;
+
+    @media (max-width: 640px) {
+      width: 130px;
+    }
+
+    .bar-track {
+      flex: 1;
+      height: 8px;
+      background: rgba($slate-950, 0.6);
+      border-radius: 4px;
+      overflow: hidden;
+
+      .bar-fill {
+        height: 100%;
+        border-radius: 4px;
+        transition: width 0.6s ease;
+
+        &--goals   { background: linear-gradient(90deg, $rose-400, $amber-400); }
+        &--passing { background: linear-gradient(90deg, $sky-400, $emerald-400); }
+        &--pace    { background: linear-gradient(90deg, $emerald-500, $emerald-400); }
+        &--defense { background: linear-gradient(90deg, $indigo-400, $sky-400); }
+      }
+    }
+
+    .metric-score {
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: $slate-100;
+      font-family: monospace;
+      width: 68px;
+      text-align: right;
+
+      small {
+        font-size: 0.68rem;
+        color: $slate-400;
+        margin-left: 2px;
+      }
+    }
+  }
+
+  .row-arrow {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: $slate-500;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+
+    @media (max-width: 540px) {
+      display: none;
+    }
+  }
+}
+
+// ==========================================
+// Sección 3: Análisis RAE
+// ==========================================
+.dashboard__section--rae {
+  .dashboard__meta-bar {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    background: rgba($slate-850, 0.8);
+    border: 1px solid rgba($slate-700, 0.7);
+    border-radius: 12px;
+    padding: 12px 20px;
+    margin-bottom: 24px;
+
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+
+      .meta-label {
+        font-size: 0.68rem;
+        font-weight: 700;
+        color: $slate-400;
+        text-transform: uppercase;
+      }
+
+      .meta-value {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: $slate-100;
+      }
+    }
+  }
+
+  .dashboard__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+
+    @media (max-width: 1024px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 580px) {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+.quarter-card {
+  background: $slate-800;
+  border: 1px solid $slate-700;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 24px -4px rgba($slate-950, 0.4);
+
+  &--dominant {
+    border-color: rgba($emerald-400, 0.6);
+    box-shadow: 0 0 16px rgba($emerald-400, 0.12);
+  }
+
+  &__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+
+    .quarter-card__tag {
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      background: $slate-700;
+      border-radius: 6px;
+      color: $slate-200;
+    }
+
+    .quarter-card__months {
+      font-size: 0.8rem;
+      color: $slate-400;
+    }
+  }
+
+  &__main {
+    margin-bottom: 16px;
+
+    .quarter-card__percentage {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: $slate-50;
+      letter-spacing: -0.02em;
+
+      .symbol {
+        font-size: 1.2rem;
+        color: $emerald-400;
+      }
+    }
+
+    .quarter-card__count {
+      font-size: 0.82rem;
+      color: $slate-400;
+    }
+  }
+
+  &__meter {
+    position: relative;
+    height: 6px;
+    background: rgba($slate-950, 0.6);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 14px;
+
+    .meter-fill {
+      height: 100%;
+      background: linear-gradient(90deg, $sky-500, $emerald-400);
+      border-radius: 3px;
+    }
+
+    .meter-baseline {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 25%;
+      width: 2px;
+      background: rgba(255, 255, 255, 0.4);
+    }
+  }
+
+  &__footer {
+    .quarter-card__diff {
+      font-size: 0.78rem;
+      font-weight: 700;
+
+      &.diff-positive {
+        color: $emerald-400;
+      }
+
+      &.diff-negative {
+        color: $rose-400;
+      }
+
+      small {
+        font-weight: 400;
+        color: $slate-500;
+        margin-left: 4px;
+      }
+    }
+  }
+}
+
+.dashboard__state-fallback {
+  text-align: center;
+  padding: 48px;
+
+  .loading-pulse {
+    width: 32px;
+    height: 32px;
+    border: 3px solid rgba($emerald-400, 0.2);
+    border-top-color: $emerald-400;
+    border-radius: 50%;
+    margin: 0 auto 12px;
+    animation: spin 0.8s linear infinite;
+  }
+
+  .state-text {
+    font-size: 0.88rem;
+    color: $slate-400;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

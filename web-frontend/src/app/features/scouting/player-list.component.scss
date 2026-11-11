@@ -1,0 +1,729 @@
+$slate-950: #020617;
+$slate-900: #0f172a;
+$slate-850: #131f37;
+$slate-800: #1e293b;
+$slate-700: #334155;
+$slate-600: #475569;
+$slate-500: #64748b;
+$slate-400: #94a3b8;
+$slate-300: #cbd5e1;
+$slate-200: #e2e8f0;
+$slate-50:  #f8fafc;
+
+$sky-400:    #38bdf8;
+$sky-500:    #0ea5e9;
+$indigo-500: #6366f1;
+$emerald-400:#34d399;
+$emerald-500:#10b981;
+$rose-400:   #fb7185;
+$rose-500:   #f43f5e;
+$amber-400:  #fbbf24;
+$amber-500:  #f59e0b;
+
+.scouting-results {
+  width: 100%;
+  max-width: 1200px;
+  margin: 32px auto 0;
+  font-family: inherit;
+}
+
+// Barra de herramientas superior
+.results-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba($slate-700, 0.5);
+}
+
+.results-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .results-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $slate-50;
+    letter-spacing: -0.02em;
+
+    .query-highlight {
+      color: $sky-400;
+      font-weight: 600;
+    }
+  }
+
+  .results-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    background: rgba($slate-800, 0.9);
+    color: $slate-300;
+    border: 1px solid $slate-700;
+    border-radius: 9999px;
+  }
+}
+
+.results-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+// Filtros por demarcación
+.position-filter-group {
+  display: flex;
+  align-items: center;
+  background: rgba($slate-850, 0.9);
+  padding: 3px;
+  border: 1px solid $slate-700;
+  border-radius: 10px;
+  gap: 2px;
+
+  .filter-pill {
+    background: transparent;
+    border: none;
+    color: $slate-400;
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+    &:hover {
+      color: $slate-200;
+    }
+
+    &--active {
+      background: $slate-700;
+      color: $slate-50;
+      font-weight: 600;
+      box-shadow: 0 2px 6px rgba($slate-950, 0.4);
+    }
+  }
+}
+
+// Selector de vista
+.view-mode-toggle {
+  display: flex;
+  align-items: center;
+  background: rgba($slate-850, 0.9);
+  border: 1px solid $slate-700;
+  border-radius: 10px;
+  padding: 3px;
+  gap: 2px;
+
+  .toggle-btn {
+    background: transparent;
+    border: none;
+    color: $slate-400;
+    padding: 6px 8px;
+    border-radius: 7px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+
+    svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    &:hover {
+      color: $slate-200;
+    }
+
+    &--active {
+      background: $slate-700;
+      color: $sky-400;
+    }
+  }
+}
+
+// ==========================================
+// Cuadrícula de Tarjetas (Card Grid)
+// ==========================================
+.player-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.player-card {
+  background: rgba($slate-850, 0.85);
+  border: 1px solid $slate-700;
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 16px -2px rgba($slate-950, 0.4);
+  outline: none;
+
+  &:hover,
+  &:focus-visible {
+    transform: translateY(-3px);
+    border-color: $sky-500;
+    background: rgba($slate-800, 0.95);
+    box-shadow: 0 12px 28px -4px rgba($slate-950, 0.6),
+                0 0 0 1px rgba($sky-500, 0.2);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  .age-tag {
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 2px 8px;
+    background: rgba($slate-800, 0.8);
+    color: $slate-300;
+    border-radius: 6px;
+    border: 1px solid rgba($slate-700, 0.5);
+  }
+
+  .card-body {
+    flex: 1;
+
+    .player-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: $slate-50;
+      margin-bottom: 4px;
+      letter-spacing: -0.01em;
+    }
+
+    .player-role {
+      font-size: 0.85rem;
+      color: $slate-400;
+      margin-bottom: 16px;
+    }
+
+    .player-affiliation {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 0.82rem;
+      color: $slate-300;
+
+      .affiliation-row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        .club-icon {
+          width: 14px;
+          height: 14px;
+          color: $slate-400;
+        }
+
+        &.league {
+          color: $slate-500;
+          font-size: 0.78rem;
+        }
+      }
+    }
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid rgba($slate-700, 0.4);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: $slate-400;
+    transition: color 0.15s ease;
+
+    .view-profile-hint {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .arrow-indicator {
+      font-size: 1.1rem;
+      transition: transform 0.2s ease;
+    }
+  }
+
+  &:hover .card-footer {
+    color: $sky-400;
+
+    .arrow-indicator {
+      transform: translateX(4px);
+    }
+  }
+}
+
+// Badges de Posición táctica
+.pos-tag,
+.pos-tag-inline {
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 4px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: rgba($slate-700, 0.6);
+  color: $slate-200;
+
+  &[data-pos="DEL"] {
+    background: rgba($rose-500, 0.18);
+    color: $rose-400;
+    border: 1px solid rgba($rose-500, 0.35);
+  }
+
+  &[data-pos="MED"] {
+    background: rgba($sky-500, 0.18);
+    color: $sky-400;
+    border: 1px solid rgba($sky-500, 0.35);
+  }
+
+  &[data-pos="DEF"] {
+    background: rgba($emerald-500, 0.18);
+    color: $emerald-400;
+    border: 1px solid rgba($emerald-500, 0.35);
+  }
+
+  &[data-pos="POR"] {
+    background: rgba($amber-500, 0.18);
+    color: $amber-400;
+    border: 1px solid rgba($amber-500, 0.35);
+  }
+}
+
+// ==========================================
+// Vista en Tabla
+// ==========================================
+.table-container {
+  background: rgba($slate-850, 0.85);
+  border: 1px solid $slate-700;
+  border-radius: 14px;
+  overflow-x: auto;
+  box-shadow: 0 8px 24px -4px rgba($slate-950, 0.4);
+}
+
+.scouting-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.88rem;
+
+  thead tr {
+    background: rgba($slate-900, 0.7);
+    border-bottom: 1px solid $slate-700;
+
+    th {
+      padding: 14px 18px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: $slate-400;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+  }
+
+  tbody tr {
+    border-bottom: 1px solid rgba($slate-800, 0.8);
+    transition: background 0.15s ease;
+    cursor: pointer;
+
+    &:hover {
+      background: rgba($slate-800, 0.9);
+    }
+
+    td {
+      padding: 14px 18px;
+      color: $slate-300;
+    }
+
+    .cell-id {
+      color: $slate-500;
+      font-family: monospace;
+    }
+
+    .cell-name {
+      color: $slate-50;
+      font-weight: 600;
+    }
+
+    .cell-age {
+      color: $slate-300;
+    }
+  }
+
+  .text-right {
+    text-align: right;
+  }
+}
+
+.table-action-btn {
+  background: rgba($sky-500, 0.15);
+  border: 1px solid rgba($sky-500, 0.3);
+  color: $sky-400;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background: $sky-500;
+    color: $slate-950;
+  }
+}
+
+// Estado sin resultados
+.empty-results {
+  text-align: center;
+  padding: 64px 20px;
+  background: rgba($slate-850, 0.4);
+  border: 1px dashed $slate-700;
+  border-radius: 16px;
+
+  .empty-icon-box {
+    width: 52px;
+    height: 52px;
+    margin: 0 auto 16px;
+    color: $slate-600;
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .empty-heading {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: $slate-200;
+    margin-bottom: 6px;
+  }
+
+  .empty-paragraph {
+    font-size: 0.85rem;
+    color: $slate-400;
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+}
+
+// Skeleton loading
+.results-loading-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+
+  .skeleton-card {
+    height: 180px;
+    background: rgba($slate-800, 0.5);
+    border: 1px solid $slate-700;
+    border-radius: 16px;
+    animation: pulse 1.5s infinite;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+// ==========================================
+// Modal de Perfil Detallado & Atributos FM
+// ==========================================
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba($slate-950, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-card {
+  background: $slate-900;
+  border: 1px solid $slate-700;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 640px;
+  box-shadow: 0 25px 50px -12px rgba($slate-950, 0.9);
+  overflow: hidden;
+  animation: modalSlide 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalSlide {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 24px 28px 18px;
+  border-bottom: 1px solid $slate-800;
+
+  .modal-player-name {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: $slate-50;
+    margin: 8px 0 4px;
+    letter-spacing: -0.02em;
+  }
+
+  .modal-player-meta {
+    font-size: 0.85rem;
+    color: $slate-400;
+
+    .dot {
+      margin: 0 6px;
+      color: $slate-600;
+    }
+  }
+
+  .modal-close-btn {
+    background: transparent;
+    border: none;
+    color: $slate-400;
+    padding: 6px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.15s ease;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    &:hover {
+      background: $slate-800;
+      color: $slate-50;
+    }
+  }
+}
+
+.modal-body {
+  padding: 24px 28px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.stats-loading {
+  text-align: center;
+  padding: 40px 0;
+  color: $slate-400;
+  font-size: 0.9rem;
+
+  .loading-spinner {
+    width: 28px;
+    height: 28px;
+    border: 3px solid rgba($sky-400, 0.2);
+    border-top-color: $sky-400;
+    border-radius: 50%;
+    margin: 0 auto 14px;
+    animation: spin 0.8s linear infinite;
+  }
+}
+
+.stats-error {
+  padding: 16px;
+  background: rgba($rose-500, 0.15);
+  border: 1px solid rgba($rose-500, 0.3);
+  border-radius: 10px;
+  color: $rose-400;
+  font-size: 0.85rem;
+}
+
+// Bloque de puntuación general OVR
+.overall-badge-box {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: rgba($slate-850, 0.9);
+  border: 1px solid $slate-700;
+  border-radius: 14px;
+  padding: 18px 22px;
+  margin-bottom: 24px;
+
+  .overall-score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    height: 72px;
+    background: linear-gradient(135deg, $sky-500, $indigo-500);
+    border-radius: 14px;
+    box-shadow: 0 4px 14px rgba($sky-500, 0.35);
+    flex-shrink: 0;
+
+    .overall-number {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: #ffffff;
+      line-height: 1;
+    }
+
+    .overall-label {
+      font-size: 0.58rem;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.85);
+      letter-spacing: 0.08em;
+      margin-top: 2px;
+    }
+  }
+
+  .overall-summary {
+    h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: $slate-50;
+      margin-bottom: 4px;
+    }
+
+    p {
+      font-size: 0.8rem;
+      color: $slate-400;
+      line-height: 1.45;
+    }
+  }
+}
+
+// Cuadrícula de Atributos FM
+.attributes-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+
+  @media (max-width: 520px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.attribute-item {
+  background: rgba($slate-800, 0.6);
+  border: 1px solid rgba($slate-700, 0.5);
+  border-radius: 12px;
+  padding: 12px 14px;
+
+  .attr-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+
+    .attr-name {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: $slate-300;
+    }
+
+    .attr-val {
+      font-size: 0.95rem;
+      font-weight: 800;
+      font-family: monospace;
+
+      &.stat-elite { color: $emerald-400; }
+      &.stat-high  { color: $sky-400; }
+      &.stat-medium{ color: $amber-400; }
+      &.stat-low   { color: $slate-400; }
+    }
+  }
+
+  .attr-bar-track {
+    height: 6px;
+    background: rgba($slate-950, 0.6);
+    border-radius: 3px;
+    overflow: hidden;
+
+    .attr-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+
+      &.stat-elite { background: linear-gradient(90deg, $emerald-500, $emerald-400); }
+      &.stat-high  { background: linear-gradient(90deg, $sky-500, $sky-400); }
+      &.stat-medium{ background: linear-gradient(90deg, $amber-500, $amber-400); }
+      &.stat-low   { background: $slate-500; }
+    }
+  }
+}
+
+.modal-footer {
+  padding: 16px 28px;
+  border-top: 1px solid $slate-800;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  .btn-radar-link {
+    background: rgba($emerald-500, 0.15);
+    border: 1px solid rgba($emerald-400, 0.4);
+    color: $emerald-400;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: all 0.15s ease;
+
+    &:hover {
+      background: $emerald-500;
+      color: $slate-950;
+      box-shadow: 0 0 12px rgba($emerald-400, 0.3);
+    }
+  }
+
+  .btn-close-modal {
+    background: $slate-800;
+    border: 1px solid $slate-700;
+    color: $slate-200;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 8px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+    &:hover {
+      background: $slate-700;
+      color: $slate-50;
+    }
+  }
+}

@@ -1,0 +1,66 @@
+<div class="scouting-page">
+  <!-- Navegación superior global de la suite de Scouting -->
+  <header class="scouting-nav">
+    <div class="nav-brand-box">
+      <span class="nav-pill">AI SCOUTING ENGINE</span>
+      <span class="nav-brand-title">Football Analytics Intelligence</span>
+    </div>
+
+    <div class="nav-actions">
+      <a
+        routerLink="/"
+        routerLinkActive="nav-btn--active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="nav-btn"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        Inicio & Scouting
+      </a>
+      <a
+        routerLink="/scouting"
+        routerLinkActive="nav-btn--active"
+        class="nav-btn"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        Buscador Avanzado
+      </a>
+    </div>
+  </header>
+
+  <!-- Sección Hero del Buscador Universal (Spotlight) -->
+  <section class="spotlight-section">
+    <div class="spotlight-header">
+      <span class="spotlight-eyebrow">BÚSQUEDA INTERACTIVA RXJS</span>
+      <h2 class="spotlight-headline">Explora y Evalúa Jugadores</h2>
+      <p class="spotlight-subtext">
+        Motor reactivo con amortiguación de pulsaciones (debounce 300ms) y cancelación de peticiones concurrentes (switchMap).
+        Filtra por nombre o posición y consulta los atributos técnicos y físicos normalizados (0-99).
+      </p>
+    </div>
+
+    <!-- Componente SearchBar (Spotlight) -->
+    <app-search-bar
+      placeholder="Buscar por nombre (ej. Pedri, Mbappé, Cubarsí, Lamine)..."
+      (playerSelected)="onPlayerSelected($event)"
+      (searchSubmitted)="onSearchSubmitted($event)"
+      (resultsFound)="onResultsFound($event)"
+    ></app-search-bar>
+  </section>
+
+  <!-- Componente Lista de Jugadores (Cards / Table) -->
+  <main class="results-section">
+    <app-player-list
+      [players]="players()"
+      [searchQuery]="currentQuery()"
+      [isLoading]="isLoading()"
+      (positionFilterChanged)="onPositionChanged($event)"
+      (playerSelected)="onPlayerSelected($event)"
+    ></app-player-list>
+  </main>
+</div>

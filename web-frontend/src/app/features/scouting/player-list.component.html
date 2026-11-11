@@ -1,0 +1,407 @@
+<section class="scouting-results">
+  <!-- Barra de herramientas superior -->
+  <div class="results-toolbar">
+    <div class="results-meta">
+      <h2 class="results-title">
+        Resultados de Scouting
+        <span *ngIf="searchQuery" class="query-highlight">&ldquo;{{ searchQuery }}&rdquo;</span>
+      </h2>
+      <span class="results-badge">{{ filteredPlayers.length }} futbolistas</span>
+    </div>
+
+    <div class="results-controls">
+      <!-- Filtro por demarcación táctica -->
+      <div class="position-filter-group" role="tablist" aria-label="Filtro de posiciones">
+        <button
+          type="button"
+          class="filter-pill"
+          [class.filter-pill--active]="activePositionFilter() === 'ALL'"
+          (click)="setPositionFilter('ALL')"
+        >
+          Todos
+        </button>
+        <button
+          type="button"
+          class="filter-pill"
+          [class.filter-pill--active]="activePositionFilter() === 'DEL'"
+          (click)="setPositionFilter('DEL')"
+        >
+          Delanteros
+        </button>
+        <button
+          type="button"
+          class="filter-pill"
+          [class.filter-pill--active]="activePositionFilter() === 'MED'"
+          (click)="setPositionFilter('MED')"
+        >
+          Medios
+        </button>
+        <button
+          type="button"
+          class="filter-pill"
+          [class.filter-pill--active]="activePositionFilter() === 'DEF'"
+          (click)="setPositionFilter('DEF')"
+        >
+          Defensas
+        </button>
+        <button
+          type="button"
+          class="filter-pill"
+          [class.filter-pill--active]="activePositionFilter() === 'POR'"
+          (click)="setPositionFilter('POR')"
+        >
+          Porteros
+        </button>
+      </div>
+
+      <!-- Selector de visualización Grid / Tabla -->
+      <div class="view-mode-toggle" role="group" aria-label="Modo de visualización">
+        <button
+          type="button"
+          class="toggle-btn"
+          [class.toggle-btn--active]="viewMode() === 'grid'"
+          (click)="setViewMode('grid')"
+          title="Vista en cuadrícula"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="toggle-btn"
+          [class.toggle-btn--active]="viewMode() === 'table'"
+          (click)="setViewMode('table')"
+          title="Vista en tabla"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="8" y1="6" x2="21" y2="6"></line>
+            <line x1="8" y1="12" x2="21" y2="12"></line>
+            <line x1="8" y1="18" x2="21" y2="18"></line>
+            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estado de carga -->
+  <div *ngIf="isLoading" class="results-loading-grid">
+    <div *ngFor="let _ of [1, 2, 3, 4, 5, 6]" class="skeleton-card"></div>
+  </div>
+
+  <!-- Contenedor de jugadores cuando no está cargando -->
+  <ng-container *ngIf="!isLoading">
+    <!-- Vista en Cuadrícula (Grid) -->
+    <div
+      *ngIf="viewMode() === 'grid' && filteredPlayers.length > 0"
+      class="player-grid"
+    >
+      <article
+        *ngFor="let player of filteredPlayers"
+        class="player-card"
+        (click)="openPlayerDetail(player)"
+        tabindex="0"
+        (keydown.enter)="openPlayerDetail(player)"
+      >
+        <div class="card-header">
+          <span
+            class="pos-tag"
+            [attr.data-pos]="getPositionGroup(player.posicion)"
+          >
+            {{ getPositionGroup(player.posicion) }}
+          </span>
+          <span class="age-tag" *ngIf="player.fecha_nacimiento">
+            {{ calculateAge(player.fecha_nacimiento) }} años
+          </span>
+        </div>
+
+        <div class="card-body">
+          <h3 class="player-title">{{ player.nombre }}</h3>
+          <p class="player-role">{{ player.posicion }}</p>
+
+          <div class="player-affiliation">
+            <div class="affiliation-row" *ngIf="player.club">
+              <svg class="club-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+              <span>{{ player.club }}</span>
+            </div>
+            <div class="affiliation-row league" *ngIf="player.liga">
+              <span>{{ player.liga }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <a
+            [routerLink]="['/scouting/player', player.id]"
+            class="view-profile-hint"
+            (click)="$event.stopPropagation()"
+          >
+            Ver Radar & Ficha Técnica
+          </a>
+          <span class="arrow-indicator">→</span>
+        </div>
+      </article>
+    </div>
+
+    <!-- Vista en Tabla -->
+    <div
+      *ngIf="viewMode() === 'table' && filteredPlayers.length > 0"
+      class="table-container"
+    >
+      <table class="scouting-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Futbolista</th>
+            <th>Demarcación</th>
+            <th>Edad</th>
+            <th>Club</th>
+            <th>Competición</th>
+            <th class="text-right">Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let player of filteredPlayers"
+            class="table-row"
+            (click)="openPlayerDetail(player)"
+          >
+            <td class="cell-id">#{{ player.id ?? '-' }}</td>
+            <td class="cell-name">
+              <strong>{{ player.nombre }}</strong>
+            </td>
+            <td>
+              <span
+                class="pos-tag-inline"
+                [attr.data-pos]="getPositionGroup(player.posicion)"
+              >
+                {{ player.posicion }}
+              </span>
+            </td>
+            <td class="cell-age">
+              {{ player.fecha_nacimiento ? calculateAge(player.fecha_nacimiento) + ' años' : '-' }}
+            </td>
+            <td class="cell-club">{{ player.club || 'Sin club' }}</td>
+            <td class="cell-league">{{ player.liga || 'LaLiga' }}</td>
+            <td class="text-right">
+              <a
+                [routerLink]="['/scouting/player', player.id]"
+                class="table-action-btn"
+                (click)="$event.stopPropagation()"
+              >
+                Atributos FM
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Estado vacío -->
+    <div *ngIf="filteredPlayers.length === 0" class="empty-results">
+      <div class="empty-icon-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </div>
+      <h3 class="empty-heading">No se encontraron jugadores</h3>
+      <p class="empty-paragraph">
+        No hay futbolistas para el filtro aplicado. Utiliza el buscador universal de arriba para encontrar jóvenes talentos o estrellas consagradas.
+      </p>
+    </div>
+  </ng-container>
+
+  <!-- Modal de Perfil Detallado (Atributos 0-99) -->
+  <div
+    *ngIf="isProfileModalOpen()"
+    class="modal-backdrop"
+    (click)="closeProfileModal()"
+    role="dialog"
+    aria-modal="true"
+  >
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <!-- Cabecera del modal -->
+      <div class="modal-header">
+        <div class="modal-header-info">
+          <span
+            class="pos-tag"
+            *ngIf="selectedPlayer()"
+            [attr.data-pos]="getPositionGroup(selectedPlayer()!.posicion)"
+          >
+            {{ selectedPlayer()!.posicion }}
+          </span>
+          <h2 class="modal-player-name">{{ selectedPlayer()?.nombre }}</h2>
+          <p class="modal-player-meta">
+            <span>{{ selectedPlayer()?.club }}</span>
+            <span class="dot">&bull;</span>
+            <span>{{ selectedPlayer()?.liga }}</span>
+            <span class="dot" *ngIf="selectedPlayer()?.fecha_nacimiento">&bull;</span>
+            <span *ngIf="selectedPlayer()?.fecha_nacimiento">
+              {{ calculateAge(selectedPlayer()?.fecha_nacimiento) }} años ({{ selectedPlayer()?.fecha_nacimiento }})
+            </span>
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close-btn"
+          (click)="closeProfileModal()"
+          aria-label="Cerrar modal"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Cuerpo del modal -->
+      <div class="modal-body">
+        <!-- Indicador de carga de atributos -->
+        <div *ngIf="isLoadingStats()" class="stats-loading">
+          <div class="loading-spinner"></div>
+          <p>Consultando atributos normalizados (0-99)...</p>
+        </div>
+
+        <!-- Error al cargar atributos -->
+        <div *ngIf="statsError()" class="stats-error">
+          <p>{{ statsError() }}</p>
+        </div>
+
+        <!-- Atributos y Radar numérico cargados -->
+        <div *ngIf="selectedPlayerStats() as stats" class="stats-content">
+          <!-- Puntuación global -->
+          <div class="overall-badge-box">
+            <div class="overall-score">
+              <span class="overall-number">{{ stats.overall }}</span>
+              <span class="overall-label">MEDIA OVR</span>
+            </div>
+            <div class="overall-summary">
+              <h4>Informe de Aptitud Técnica</h4>
+              <p>
+                Atributos normalizados en escala 0-99 frente a la media de referencia de su demarcación.
+              </p>
+            </div>
+          </div>
+
+          <!-- Cuadrícula de Atributos Físicos y Técnicos -->
+          <div class="attributes-grid">
+            <!-- Ritmo / Pace -->
+            <div class="attribute-item">
+              <div class="attr-header">
+                <span class="attr-name">Ritmo (PAC)</span>
+                <span class="attr-val" [ngClass]="getStatClass(stats.pace)">{{ stats.pace }}</span>
+              </div>
+              <div class="attr-bar-track">
+                <div
+                  class="attr-bar-fill"
+                  [ngClass]="getStatClass(stats.pace)"
+                  [style.width.%]="stats.pace"
+                ></div>
+              </div>
+            </div>
+
+            <!-- Tiro / Shooting -->
+            <div class="attribute-item">
+              <div class="attr-header">
+                <span class="attr-name">Tiro (SHO)</span>
+                <span class="attr-val" [ngClass]="getStatClass(stats.shooting)">{{ stats.shooting }}</span>
+              </div>
+              <div class="attr-bar-track">
+                <div
+                  class="attr-bar-fill"
+                  [ngClass]="getStatClass(stats.shooting)"
+                  [style.width.%]="stats.shooting"
+                ></div>
+              </div>
+            </div>
+
+            <!-- Pase / Passing -->
+            <div class="attribute-item">
+              <div class="attr-header">
+                <span class="attr-name">Pase (PAS)</span>
+                <span class="attr-val" [ngClass]="getStatClass(stats.passing)">{{ stats.passing }}</span>
+              </div>
+              <div class="attr-bar-track">
+                <div
+                  class="attr-bar-fill"
+                  [ngClass]="getStatClass(stats.passing)"
+                  [style.width.%]="stats.passing"
+                ></div>
+              </div>
+            </div>
+
+            <!-- Regate / Dribbling -->
+            <div class="attribute-item">
+              <div class="attr-header">
+                <span class="attr-name">Regate (DRI)</span>
+                <span class="attr-val" [ngClass]="getStatClass(stats.dribbling)">{{ stats.dribbling }}</span>
+              </div>
+              <div class="attr-bar-track">
+                <div
+                  class="attr-bar-fill"
+                  [ngClass]="getStatClass(stats.dribbling)"
+                  [style.width.%]="stats.dribbling"
+                ></div>
+              </div>
+            </div>
+
+            <!-- Defensa / Defending -->
+            <div class="attribute-item">
+              <div class="attr-header">
+                <span class="attr-name">Defensa (DEF)</span>
+                <span class="attr-val" [ngClass]="getStatClass(stats.defending)">{{ stats.defending }}</span>
+              </div>
+              <div class="attr-bar-track">
+                <div
+                  class="attr-bar-fill"
+                  [ngClass]="getStatClass(stats.defending)"
+                  [style.width.%]="stats.defending"
+                ></div>
+              </div>
+            </div>
+
+            <!-- Físico / Physicality -->
+            <div class="attribute-item">
+              <div class="attr-header">
+                <span class="attr-name">Físico (PHY)</span>
+                <span class="attr-val" [ngClass]="getStatClass(stats.physicality)">{{ stats.physicality }}</span>
+              </div>
+              <div class="attr-bar-track">
+                <div
+                  class="attr-bar-fill"
+                  [ngClass]="getStatClass(stats.physicality)"
+                  [style.width.%]="stats.physicality"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pie del modal -->
+      <div class="modal-footer">
+        <a
+          *ngIf="selectedPlayer()?.id"
+          [routerLink]="['/scouting/player', selectedPlayer()!.id]"
+          (click)="closeProfileModal()"
+          class="btn-radar-link"
+        >
+          Ver Análisis de Radar Completo 📊
+        </a>
+        <button type="button" class="btn-close-modal" (click)="closeProfileModal()">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

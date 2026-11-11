@@ -1,0 +1,137 @@
+$slate-950: #020617;
+$slate-900: #0f172a;
+$slate-850: #131f37;
+$slate-800: #1e293b;
+$slate-700: #334155;
+$slate-600: #475569;
+$slate-400: #94a3b8;
+$slate-200: #e2e8f0;
+$slate-50:  #f8fafc;
+$emerald-400: #34d399;
+$emerald-500: #10b981;
+$sky-400:   #38bdf8;
+$sky-500:   #0ea5e9;
+
+.scouting-page {
+  min-height: 100vh;
+  background-color: $slate-950;
+  color: $slate-50;
+  padding: 24px 32px 64px;
+  max-width: 1320px;
+  margin: 0 auto;
+
+  @media (max-width: 640px) {
+    padding: 16px 16px 48px;
+  }
+}
+
+.scouting-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-bottom: 20px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid rgba($slate-700, 0.6);
+
+  .nav-brand-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .nav-pill {
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      color: $emerald-400;
+      background: rgba($emerald-500, 0.14);
+      border: 1px solid rgba($emerald-400, 0.3);
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .nav-brand-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: $slate-50;
+      letter-spacing: -0.01em;
+    }
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: $slate-400;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      background: rgba($slate-850, 0.8);
+      border: 1px solid rgba($slate-700, 0.7);
+      transition: all 0.15s ease;
+
+      &:hover {
+        color: $slate-50;
+        background: $slate-800;
+        border-color: $slate-600;
+      }
+
+      &--active {
+        color: $emerald-400;
+        border-color: rgba($emerald-400, 0.4);
+        background: $slate-800;
+      }
+    }
+  }
+}
+
+.spotlight-section {
+  text-align: center;
+  margin-bottom: 40px;
+
+  .spotlight-header {
+    max-width: 680px;
+    margin: 0 auto 28px;
+
+    .spotlight-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      color: $sky-400;
+      text-transform: uppercase;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+
+    .spotlight-headline {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: $slate-50;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin-bottom: 12px;
+
+      @media (max-width: 640px) {
+        font-size: 1.7rem;
+      }
+    }
+
+    .spotlight-subtext {
+      font-size: 0.95rem;
+      color: $slate-400;
+      line-height: 1.6;
+    }
+  }
+}
+
+.results-section {
+  width: 100%;
+}

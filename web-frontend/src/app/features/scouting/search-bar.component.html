@@ -1,0 +1,167 @@
+<div class="spotlight-wrapper">
+  <!-- Barra de entrada universal estilo Spotlight -->
+  <div
+    class="spotlight-input-container"
+    [class.spotlight-input-container--focused]="isOpen()"
+    [class.spotlight-input-container--loading]="isLoading()"
+  >
+    <!-- Icono de lupa de scouting -->
+    <div class="spotlight-icon" aria-hidden="true">
+      <svg
+        class="icon-svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+    </div>
+
+    <!-- Campo de entrada reactivo -->
+    <input
+      type="text"
+      class="spotlight-input"
+      [formControl]="searchControl"
+      [placeholder]="placeholder"
+      (focus)="onFocus()"
+      (keydown)="onKeyDown($event)"
+      autocomplete="off"
+      spellcheck="false"
+      role="combobox"
+      [attr.aria-expanded]="isOpen()"
+      aria-label="Buscar jugadores de fútbol"
+    />
+
+    <!-- Indicador de carga / Spinner reactivo -->
+    <div *ngIf="isLoading()" class="spotlight-spinner" aria-label="Cargando resultados">
+      <div class="spinner-ring"></div>
+    </div>
+
+    <!-- Botón para limpiar búsqueda -->
+    <button
+      *ngIf="searchControl.value.length > 0 && !isLoading()"
+      type="button"
+      class="spotlight-clear-btn"
+      (click)="clearSearch()"
+      title="Limpiar búsqueda"
+      aria-label="Limpiar búsqueda"
+    >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+
+    <!-- Píldora de atajo de teclado -->
+    <div class="spotlight-shortcut" (click)="submitSearch()" title="Presiona Enter para buscar">
+      <span class="key-symbol">↵</span>
+      <span class="key-text">Enter</span>
+    </div>
+  </div>
+
+  <!-- Panel desplegable flotante de resultados Spotlight -->
+  <div
+    *ngIf="isOpen() && searchControl.value.trim().length > 0"
+    class="spotlight-dropdown"
+    role="listbox"
+  >
+    <!-- Encabezado del desplegable -->
+    <div class="dropdown-header">
+      <span class="dropdown-eyebrow">COINCIDENCIAS EN TIEMPO REAL</span>
+      <span *ngIf="latestResults().length > 0" class="dropdown-count-badge">
+        {{ latestResults().length }} jugadores
+      </span>
+    </div>
+
+    <!-- Listado de resultados -->
+    <ul *ngIf="latestResults().length > 0" class="dropdown-list">
+      <li
+        *ngFor="let player of latestResults(); let i = index"
+        class="dropdown-item"
+        [class.dropdown-item--active]="selectedIndex() === i"
+        (click)="selectPlayer(player)"
+        (mouseenter)="selectedIndex.set(i)"
+        role="option"
+        [attr.aria-selected]="selectedIndex() === i"
+      >
+        <!-- Badge de categoría de posición táctica -->
+        <div
+          class="position-badge"
+          [attr.data-pos]="getPositionGroup(player.posicion)"
+        >
+          {{ getPositionGroup(player.posicion) }}
+        </div>
+
+        <!-- Información central del futbolista -->
+        <div class="player-info">
+          <div class="player-headline">
+            <span class="player-name">{{ player.nombre }}</span>
+            <span class="player-age-badge" *ngIf="player.fecha_nacimiento">
+              {{ calculateAge(player.fecha_nacimiento) }} años
+            </span>
+          </div>
+
+          <div class="player-subdetails">
+            <span class="player-club" *ngIf="player.club">
+              <svg class="club-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+              {{ player.club }}
+            </span>
+            <span class="separator">&bull;</span>
+            <span class="player-position">{{ player.posicion }}</span>
+            <span class="separator" *ngIf="player.liga">&bull;</span>
+            <span class="player-league" *ngIf="player.liga">{{ player.liga }}</span>
+          </div>
+        </div>
+
+        <!-- Acción visual en el item -->
+        <div class="item-action">
+          <span class="action-hint">Ver perfil</span>
+          <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </div>
+      </li>
+    </ul>
+
+    <!-- Estado vacío / Sin coincidencias -->
+    <div
+      *ngIf="latestResults().length === 0 && !isLoading()"
+      class="dropdown-empty-state"
+    >
+      <div class="empty-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          <line x1="8" y1="11" x2="14" y2="11"></line>
+        </svg>
+      </div>
+      <p class="empty-title">Sin futbolistas coincidentes</p>
+      <p class="empty-desc">
+        No se encontraron registros para &ldquo;<strong>{{ searchControl.value }}</strong>&rdquo;.
+        Prueba con otro nombre o pulsa Enter para consultar la base completa.
+      </p>
+    </div>
+
+    <!-- Barra de pie de página con atajos -->
+    <div class="dropdown-footer">
+      <div class="footer-hint">
+        <span class="hint-key">↑↓</span>
+        <span class="hint-label">Navegar</span>
+      </div>
+      <div class="footer-hint">
+        <span class="hint-key">↵</span>
+        <span class="hint-label">Seleccionar / Ver todo</span>
+      </div>
+      <div class="footer-hint">
+        <span class="hint-key">Esc</span>
+        <span class="hint-label">Cerrar</span>
+      </div>
+    </div>
+  </div>
+</div>

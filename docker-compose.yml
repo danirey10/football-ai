@@ -1,0 +1,76 @@
+services:
+  db:
+    image: mongo:7.0
+    container_name: scouting_mongo_db
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-scoutadmin}
+      MONGO_INITDB_ROOT_PASSWORD: "${MONGO_INITDB_ROOT_PASSWORD:?Defina MONGO_INITDB_ROOT_PASSWORD en .env}"
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE:-scouting_db}
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - scouting_network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  api:
+    build:
+      context: ./api-backend
+      dockerfile: Dockerfile
+    container_name: scouting_fastapi_backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGO_URI=${MONGO_URI:-mongodb://${MONGO_INITDB_ROOT_USERNAME:-scoutadmin}:${MONGO_INITDB_ROOT_PASSWORD}@db:27017/?authSource=admin}
+      - MONGO_DB_NAME=${MONGO_INITDB_DATABASE:-scouting_db}
+      - CORS_ORIGINS=http://localhost:4200
+    volumes:
+      - ./api-backend:/app
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - scouting_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+  web:
+    build:
+      context: ./web-frontend
+      dockerfile: Dockerfile
+    container_name: scouting_angular_frontend
+    restart: unless-stopped
+    ports:
+      - "4200:4200"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - ./web-frontend:/app
+      - /app/node_modules
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - scouting_network
+    command: npm start -- --host 0.0.0.0 --poll 2000
+
+volumes:
+  mongo_data:
+    driver: local
+
+networks:
+  scouting_network:
+    driver: bridge

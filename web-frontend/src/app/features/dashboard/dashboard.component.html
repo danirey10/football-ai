@@ -1,0 +1,343 @@
+<section class="dashboard">
+  <!-- Barra de navegación global -->
+  <nav class="dashboard__top-nav">
+    <div class="nav-brand-box">
+      <span class="nav-pill">AI SCOUTING ENGINE</span>
+      <span class="nav-brand-title">Football Analytics Intelligence</span>
+    </div>
+    <div class="nav-actions">
+      <a
+        routerLink="/"
+        routerLinkActive="nav-btn--active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="nav-btn"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        Inicio & Scouting
+      </a>
+      <a
+        routerLink="/scouting"
+        routerLinkActive="nav-btn--active"
+        class="nav-btn"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        Buscador Avanzado
+      </a>
+    </div>
+  </nav>
+
+  <!-- ============================================== -->
+  <!-- HERO: PANEL DE BÚSQUEDA Y EJEMPLOS DESTACADOS  -->
+  <!-- ============================================== -->
+  <header class="dashboard__hero">
+    <div class="hero-content">
+      <span class="hero-badge">PLATAFORMA INTEGRAL DE SCOUTING</span>
+      <h1 class="hero-title">Encuentra y Evalúa Jugadores con Inteligencia de Datos</h1>
+      <p class="hero-subtitle">
+        Accede a métricas técnicas y físicas normalizadas (De 0 a 99) y gráficos de radar multidimensionales.
+      </p>
+    </div>
+
+    <!-- Buscador Universal Spotlight -->
+    <div class="hero-search-box">
+      <app-search-bar
+        placeholder="Buscar jugador por nombre (ej. Pedri, Mbappé, Yamal, Haaland)..."
+        (playerSelected)="onPlayerSelected($event)"
+        (searchSubmitted)="onSearchSubmitted($event)"
+      ></app-search-bar>
+    </div>
+
+    <!-- Ejemplos rápidos de búsqueda -->
+    <div class="quick-examples-row">
+      <span class="examples-label">Búsquedas populares:</span>
+      <div class="examples-pills">
+        <button
+          *ngFor="let ex of quickSearchExamples"
+          type="button"
+          class="example-pill"
+          (click)="navigateToPlayer(ex.id)"
+        >
+          <span class="pill-dot"></span>
+          <span>{{ ex.label }}</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================================== -->
+  <!-- SECCIÓN 1: FUTBOLISTAS MÁS VALORADOS           -->
+  <!-- ============================================== -->
+  <section class="dashboard__section">
+    <div class="section-header">
+      <div class="section-title-box">
+        <span class="section-eyebrow">MERCADO & VALORACIÓN</span>
+        <h2 class="section-title">Futbolistas Más Valorados</h2>
+      </div>
+      <a routerLink="/scouting" class="section-link">Ver catálogo completo →</a>
+    </div>
+
+    <div class="top-valued-grid">
+      <article
+        *ngFor="let p of topValuedPlayers"
+        class="valued-card"
+        (click)="navigateToPlayer(p.id)"
+        tabindex="0"
+        (keydown.enter)="navigateToPlayer(p.id)"
+      >
+        <div class="valued-card__top">
+          <span class="pos-badge" [attr.data-pos]="getPositionGroup(p.posicion)">
+            {{ getPositionGroup(p.posicion) }}
+          </span>
+          <span class="ovr-pill">{{ p.overall ?? 85 }} OVR</span>
+        </div>
+
+        <div class="valued-card__avatar">
+          <div class="avatar-ring">
+            <span class="avatar-text">{{ getInitials(p.nombre) }}</span>
+          </div>
+        </div>
+
+        <div class="valued-card__info">
+          <h3 class="player-name">{{ p.nombre }}</h3>
+          <p class="player-team">{{ p.club || 'Club Profesional' }}</p>
+          <span class="player-role">{{ p.posicion }} &bull; {{ calculateAge(p.fecha_nacimiento) }} años</span>
+        </div>
+
+        <div class="valued-card__footer">
+          <div class="market-value-box">
+            <span class="value-label">Valor de mercado</span>
+            <strong class="value-amount">{{ getMarketValue(p) }}</strong>
+          </div>
+          <span class="action-arrow">→</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============================================== -->
+  <!-- SECCIÓN 2: LÍDERES POR ATRIBUTOS CLAVE        -->
+  <!-- (Goles / Pases / Ritmo / Defensa)             -->
+  <!-- ============================================== -->
+  <section class="dashboard__section">
+    <div class="section-header">
+      <div class="section-title-box">
+        <span class="section-eyebrow">RANKINGS POR ATRIBUTO FM (0-99)</span>
+        <h2 class="section-title">Líderes de Rendimiento Técnico</h2>
+      </div>
+
+      <!-- Pestañas de atributos -->
+      <div class="attribute-tabs" role="tablist">
+        <button
+          type="button"
+          class="tab-btn"
+          [class.tab-btn--active]="activeLeaderTab() === 'goals'"
+          (click)="setActiveLeaderTab('goals')"
+        >
+          🎯 Goles / Tiro (SHO)
+        </button>
+        <button
+          type="button"
+          class="tab-btn"
+          [class.tab-btn--active]="activeLeaderTab() === 'passing'"
+          (click)="setActiveLeaderTab('passing')"
+        >
+          🎨 Pases y Creación (PAS)
+        </button>
+        <button
+          type="button"
+          class="tab-btn"
+          [class.tab-btn--active]="activeLeaderTab() === 'pace'"
+          (click)="setActiveLeaderTab('pace')"
+        >
+          ⚡ Velocidad y Ritmo (PAC)
+        </button>
+        <button
+          type="button"
+          class="tab-btn"
+          [class.tab-btn--active]="activeLeaderTab() === 'defense'"
+          (click)="setActiveLeaderTab('defense')"
+        >
+          🛡️ Defensa y Muro (DEF)
+        </button>
+      </div>
+    </div>
+
+    <!-- Lista de líderes según la pestaña seleccionada -->
+    <div class="leaderboard-card">
+      <!-- Pestaña Goles -->
+      <div *ngIf="activeLeaderTab() === 'goals'" class="leaderboard-list">
+        <div
+          *ngFor="let p of topShootingPlayers; let i = index"
+          class="leaderboard-row"
+          (click)="navigateToPlayer(p.id)"
+        >
+          <span class="rank-num">#{{ i + 1 }}</span>
+          <div class="player-meta">
+            <strong class="name">{{ p.nombre }}</strong>
+            <span class="sub">{{ p.club }} &bull; {{ p.posicion }}</span>
+          </div>
+          <div class="metric-visual">
+            <div class="bar-track">
+              <div class="bar-fill bar-fill--goals" [style.width.%]="p.shooting ?? 80"></div>
+            </div>
+            <strong class="metric-score">{{ p.shooting ?? 80 }} <small>SHO</small></strong>
+          </div>
+          <span class="row-arrow">Ver radar →</span>
+        </div>
+      </div>
+
+      <!-- Pestaña Pases -->
+      <div *ngIf="activeLeaderTab() === 'passing'" class="leaderboard-list">
+        <div
+          *ngFor="let p of topPassingPlayers; let i = index"
+          class="leaderboard-row"
+          (click)="navigateToPlayer(p.id)"
+        >
+          <span class="rank-num">#{{ i + 1 }}</span>
+          <div class="player-meta">
+            <strong class="name">{{ p.nombre }}</strong>
+            <span class="sub">{{ p.club }} &bull; {{ p.posicion }}</span>
+          </div>
+          <div class="metric-visual">
+            <div class="bar-track">
+              <div class="bar-fill bar-fill--passing" [style.width.%]="p.passing ?? 80"></div>
+            </div>
+            <strong class="metric-score">{{ p.passing ?? 80 }} <small>PAS</small></strong>
+          </div>
+          <span class="row-arrow">Ver radar →</span>
+        </div>
+      </div>
+
+      <!-- Pestaña Velocidad -->
+      <div *ngIf="activeLeaderTab() === 'pace'" class="leaderboard-list">
+        <div
+          *ngFor="let p of topPacePlayers; let i = index"
+          class="leaderboard-row"
+          (click)="navigateToPlayer(p.id)"
+        >
+          <span class="rank-num">#{{ i + 1 }}</span>
+          <div class="player-meta">
+            <strong class="name">{{ p.nombre }}</strong>
+            <span class="sub">{{ p.club }} &bull; {{ p.posicion }}</span>
+          </div>
+          <div class="metric-visual">
+            <div class="bar-track">
+              <div class="bar-fill bar-fill--pace" [style.width.%]="p.pace ?? 80"></div>
+            </div>
+            <strong class="metric-score">{{ p.pace ?? 80 }} <small>PAC</small></strong>
+          </div>
+          <span class="row-arrow">Ver radar →</span>
+        </div>
+      </div>
+
+      <!-- Pestaña Defensa -->
+      <div *ngIf="activeLeaderTab() === 'defense'" class="leaderboard-list">
+        <div
+          *ngFor="let p of topDefendingPlayers; let i = index"
+          class="leaderboard-row"
+          (click)="navigateToPlayer(p.id)"
+        >
+          <span class="rank-num">#{{ i + 1 }}</span>
+          <div class="player-meta">
+            <strong class="name">{{ p.nombre }}</strong>
+            <span class="sub">{{ p.club }} &bull; {{ p.posicion }}</span>
+          </div>
+          <div class="metric-visual">
+            <div class="bar-track">
+              <div class="bar-fill bar-fill--defense" [style.width.%]="p.defending ?? 80"></div>
+            </div>
+            <strong class="metric-score">{{ p.defending ?? 80 }} <small>DEF</small></strong>
+          </div>
+          <span class="row-arrow">Ver radar →</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================== -->
+  <!-- SECCIÓN 3: EFECTO DE LA EDAD RELATIVA (RAE)    -->
+  <!-- ============================================== -->
+  <section class="dashboard__section dashboard__section--rae">
+    <div class="section-header">
+      <div class="section-title-box">
+        <span class="section-eyebrow">ANÁLISIS DEMOGRÁFICO &bull; SCOUTING INTELLIGENCE</span>
+        <h2 class="section-title">Efecto de la Edad Relativa (RAE)</h2>
+        <p class="section-description">
+          Distribución trimestral de la fecha de nacimiento en el censo formativo.
+          Una concentración en Q1 respecto a la media teórica uniforme (25%) refleja la sobrerrepresentación por madurez física.
+        </p>
+      </div>
+    </div>
+
+    <ng-container *ngIf="raeStats$ | async as stats; else stateFallback">
+      <!-- Metadatos de contexto -->
+      <div class="dashboard__meta-bar" *ngIf="stats">
+        <div class="meta-item">
+          <span class="meta-label">Muestra total analizada</span>
+          <span class="meta-value">{{ stats.totalPlayers }} jugadores</span>
+        </div>
+        <div class="meta-item" *ngIf="stats.category">
+          <span class="meta-label">Categoría / Cohorte</span>
+          <span class="meta-value">{{ stats.category }}</span>
+        </div>
+        <div class="meta-item" *ngIf="stats.season">
+          <span class="meta-label">Temporada</span>
+          <span class="meta-value">{{ stats.season }}</span>
+        </div>
+      </div>
+
+      <!-- Grid de 4 tarjetas semánticas (Q1 a Q4) -->
+      <div class="dashboard__grid" *ngIf="stats">
+        <article
+          *ngFor="let quarter of stats.quarters; trackBy: trackByQuarter"
+          class="quarter-card"
+          [class.quarter-card--dominant]="quarter.percentage >= 35"
+        >
+          <div class="quarter-card__top">
+            <span class="quarter-card__tag">{{ quarter.id }}</span>
+            <span class="quarter-card__months">{{ quarter.months }}</span>
+          </div>
+
+          <div class="quarter-card__main">
+            <div class="quarter-card__percentage">
+              {{ quarter.percentage | number: '1.1-1' }}<span class="symbol">%</span>
+            </div>
+            <div class="quarter-card__count">
+              <strong>{{ quarter.count }}</strong> jugadores registrados
+            </div>
+          </div>
+
+          <div class="quarter-card__meter" aria-hidden="true">
+            <div class="meter-fill" [style.width.%]="quarter.percentage"></div>
+            <div class="meter-baseline" title="Media esperada (25%)"></div>
+          </div>
+
+          <footer class="quarter-card__footer">
+            <span
+              class="quarter-card__diff"
+              [class.diff-positive]="quarter.percentage >= 25"
+              [class.diff-negative]="quarter.percentage < 25"
+            >
+              {{ (quarter.percentage - 25) >= 0 ? '+' : '' }}{{ (quarter.percentage - 25) | number: '1.1-1' }}%
+              <small>vs distribución uniforme (25%)</small>
+            </span>
+          </footer>
+        </article>
+      </div>
+    </ng-container>
+
+    <!-- Fallback de carga -->
+    <ng-template #stateFallback>
+      <div class="dashboard__state-fallback" role="status">
+        <div class="loading-pulse"></div>
+        <p class="state-text">Consultando servicio analítico de scouting...</p>
+      </div>
+    </ng-template>
+  </section>
+</section>

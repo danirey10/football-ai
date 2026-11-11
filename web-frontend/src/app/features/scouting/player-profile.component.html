@@ -1,0 +1,226 @@
+<div class="player-profile-view">
+  <!-- Barra de navegación global -->
+  <nav class="profile-nav">
+    <div class="nav-brand-box">
+      <span class="nav-pill">AI SCOUTING ENGINE</span>
+      <span class="nav-brand-title">Football Analytics Intelligence</span>
+    </div>
+    <div class="nav-actions">
+      <a
+        routerLink="/"
+        routerLinkActive="nav-btn--active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="nav-btn"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        Inicio & Scouting
+      </a>
+      <a
+        routerLink="/scouting"
+        routerLinkActive="nav-btn--active"
+        class="nav-btn"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        Buscador Avanzado
+      </a>
+    </div>
+  </nav>
+
+  <!-- Barra de navegación y retroceso -->
+  <div class="profile-top-bar">
+    <a routerLink="/scouting" class="back-link">
+      <svg class="back-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      <span>Volver a la búsqueda de scouting</span>
+    </a>
+
+    <div class="profile-header-tag" *ngIf="player() as p">
+      <span class="system-tag">SISTEMA SCOUTING PRO</span>
+      <span class="id-tag">ID #{{ p.id }}</span>
+    </div>
+  </div>
+
+  <!-- Estado de carga -->
+  <div *ngIf="isLoading()" class="profile-loading-state" role="status">
+    <div class="loading-ring"></div>
+    <p>Cargando ficha técnica y evaluando atributos dimensionales...</p>
+  </div>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="errorMessage() && !isLoading()" class="profile-error-state">
+    <div class="error-box">
+      <h3>Ficha no disponible</h3>
+      <p>{{ errorMessage() }}</p>
+      <a routerLink="/scouting" class="btn-return">Regresar al buscador</a>
+    </div>
+  </div>
+
+  <!-- Contenido principal: Maquetación de dos columnas (Izquierda: Ficha, Derecha: Radar) -->
+  <div
+    *ngIf="!isLoading() && !errorMessage() && player() as p"
+    class="profile-layout"
+  >
+    <!-- ============================================== -->
+    <!-- COLUMNA IZQUIERDA: FICHA TÉCNICA DEL FUTBOLISTA -->
+    <!-- ============================================== -->
+    <aside class="player-dossier-card">
+      <!-- Foto Placeholder del jugador -->
+      <div class="avatar-section">
+        <div class="photo-placeholder">
+          <!-- Silueta estilizada de jugador -->
+          <svg class="silhouette-svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+          </svg>
+          <div class="avatar-initials">{{ getInitials(p.nombre) }}</div>
+        </div>
+
+        <div
+          class="position-badge-overlay"
+          [attr.data-pos]="getPositionGroup(p.posicion)"
+        >
+          {{ getPositionGroup(p.posicion) }}
+        </div>
+      </div>
+
+      <!-- Nombre y Demarcación -->
+      <div class="identity-section">
+        <h1 class="player-name">{{ p.nombre }}</h1>
+        <p class="player-position">{{ p.posicion }}</p>
+      </div>
+
+      <!-- Ficha de Datos Clave (Club, Valor, Posición, Edad) -->
+      <div class="dossier-meta-grid">
+        <!-- Club -->
+        <div class="meta-card">
+          <span class="meta-label">Club / Equipo</span>
+          <div class="meta-value-row">
+            <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            <strong class="meta-value">{{ p.club || 'Cantera Federada' }}</strong>
+          </div>
+        </div>
+
+        <!-- Valor de mercado estimado -->
+        <div class="meta-card meta-card--highlight">
+          <span class="meta-label">Valor de Mercado Estimado</span>
+          <div class="meta-value-row">
+            <span class="currency-symbol">€</span>
+            <strong class="meta-value market-value">{{ getMarketValue(stats(), p) }}</strong>
+          </div>
+        </div>
+
+        <!-- Posición principal -->
+        <div class="meta-card">
+          <span class="meta-label">Demarcación Táctica</span>
+          <div class="meta-value-row">
+            <strong class="meta-value">{{ p.posicion }}</strong>
+          </div>
+        </div>
+
+        <!-- Edad y nacimiento -->
+        <div class="meta-card">
+          <span class="meta-label">Edad / Nacimiento</span>
+          <div class="meta-value-row">
+            <strong class="meta-value">
+              {{ calculateAge(p.fecha_nacimiento) }} años
+            </strong>
+            <small class="birth-date" *ngIf="p.fecha_nacimiento">({{ p.fecha_nacimiento }})</small>
+          </div>
+        </div>
+
+        <!-- Competición / Liga -->
+        <div class="meta-card">
+          <span class="meta-label">Competición</span>
+          <div class="meta-value-row">
+            <strong class="meta-value">{{ p.liga || 'LaLiga EA Sports' }}</strong>
+          </div>
+        </div>
+
+        <!-- Valoración Global OVR -->
+        <div class="meta-card" *ngIf="stats() as s">
+          <span class="meta-label">Media Global (OVR)</span>
+          <div class="meta-value-row">
+            <strong class="meta-value ovr-badge">{{ s.overall }} OVR</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estado de Scouting -->
+      <div
+        class="scouting-verdict-box"
+        [class.scouting-verdict-box--warning]="hasNoPotential(p, stats())"
+      >
+        <div class="verdict-header">
+          <span class="verdict-dot"></span>
+          <span class="verdict-title">DIAGNÓSTICO TÉCNICO</span>
+        </div>
+        <p class="verdict-text">
+          {{ getTechnicalVerdict(p, stats()) }}
+        </p>
+      </div>
+    </aside>
+
+    <!-- ============================================== -->
+    <!-- COLUMNA DERECHA: RADAR DE MÉTRICAS COMPARATIVAS -->
+    <!-- ============================================== -->
+    <section class="radar-analytics-panel">
+      <div class="radar-panel-header">
+        <div class="panel-eyebrow">ANÁLISIS MULTIDIMENSIONAL DE RENDIMIENTO</div>
+        <h2 class="panel-title">Radar de Scouting Deportivo</h2>
+        <p class="panel-subtitle">
+          Visualización de atributos técnicos y físicos normalizados en escala de 0 a 99 frente a la media de referencia de su demarcación.
+        </p>
+      </div>
+
+      <!-- Lienzo Canvas de Chart.js / ng2-charts -->
+      <div class="radar-chart-container">
+        <canvas
+          baseChart
+          [data]="radarChartData"
+          [options]="radarChartOptions"
+          [type]="radarChartType"
+          aria-label="Gráfico de radar comparativo de métricas de fútbol"
+          role="img"
+        >
+        </canvas>
+      </div>
+
+      <!-- Cuadrícula resumen de métricas clave del radar -->
+      <div class="metrics-pill-grid" *ngIf="stats() as s">
+        <div class="metric-pill" [class.metric-pill--elite]="s.pace >= 80">
+          <span class="pill-name">Ritmo (PAC)</span>
+          <strong class="pill-val">{{ s.pace }}</strong>
+        </div>
+        <div class="metric-pill" [class.metric-pill--elite]="s.shooting >= 80">
+          <span class="pill-name">Tiro (SHO)</span>
+          <strong class="pill-val">{{ s.shooting }}</strong>
+        </div>
+        <div class="metric-pill" [class.metric-pill--elite]="s.passing >= 80">
+          <span class="pill-name">Pase (PAS)</span>
+          <strong class="pill-val">{{ s.passing }}</strong>
+        </div>
+        <div class="metric-pill" [class.metric-pill--elite]="s.dribbling >= 80">
+          <span class="pill-name">Regate (DRI)</span>
+          <strong class="pill-val">{{ s.dribbling }}</strong>
+        </div>
+        <div class="metric-pill" [class.metric-pill--elite]="s.defending >= 80">
+          <span class="pill-name">Defensa (DEF)</span>
+          <strong class="pill-val">{{ s.defending }}</strong>
+        </div>
+        <div class="metric-pill" [class.metric-pill--elite]="s.physicality >= 80">
+          <span class="pill-name">Físico (PHY)</span>
+          <strong class="pill-val">{{ s.physicality }}</strong>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
